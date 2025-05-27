@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<h1>Offres</h1>
+<ul>
+  <% Object.entries(offers).forEach(([id, offer]) => { %>
+    <li>
+      <%= offer.title || 'Sans titre' %>
+      <form action="/offers/delete/<%= id %>" method="POST" style="display:inline">
+        <button type="submit">Supprimer</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+</body>
+</html>

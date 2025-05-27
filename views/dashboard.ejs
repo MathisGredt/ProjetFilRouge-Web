@@ -4,11 +4,11 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-<h1>Liste des utilisateurs</h1>
+<h1>Tableau de bord</h1>
 <ul>
-    <% users.forEach(user => { %>
-        <li><%= user.email %></li>
-    <% }) %>
+  <li>Utilisateurs : <%= usersCount %></li>
+  <li>Offres : <%= offersCount %></li>
+  <li>Enchères : <%= bidsCount %></li>
 </ul>
 </body>
 </html>

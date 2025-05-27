@@ -1,2 +1,11 @@
+# Ne pas suivre les dépendances Node.js
 node_modules/
+
+# Clé Firebase privée
 serviceAccountKey.json
+
+# Fichier d'environnement si besoin
+.env
+
+# Config JetBrains/WebStorm
+.idea/

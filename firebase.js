@@ -1,11 +1,17 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json');
+require('dotenv').config();
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://encheres-app-default-rtdb.europe-west1.firebasedatabase.app/'
-});
+let app;
+if (!admin.apps.length) {
+    app = admin.initializeApp({
+        credential: admin.credential.cert(require('./serviceAccountKey.json')),
+        databaseURL: process.env.FIREBASE_DATABASE_URL
+    });
+} else {
+    app = admin.app(); // Réutilise l'instance existante
+}
 
 const db = admin.database();
+const auth = admin.auth();
 
-module.exports = { db };
+module.exports = { admin, db, auth };
