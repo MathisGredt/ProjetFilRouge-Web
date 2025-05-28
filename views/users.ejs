@@ -2,9 +2,11 @@
 <html>
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="/styles/header.css">
 </head>
 <body>
-<h1>Utilisateurs</h1>
+<%- include('common/header') %>
 <ul>
   <% Object.entries(users).forEach(([id, user]) => { %>
     <li>

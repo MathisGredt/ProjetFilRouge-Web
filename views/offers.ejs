@@ -1,20 +1,28 @@
+<!-- views/offers.ejs -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
+    <title>Enchères en cours</title>
+    <link rel="stylesheet" href="/styles/offers.css">
+    <link rel="stylesheet" href="/styles/header.css">
 </head>
 <body>
-<h1>Offres</h1>
-<ul>
-  <% Object.entries(offers).forEach(([id, offer]) => { %>
-    <li>
-      <%= offer.title || 'Sans titre' %>
-      <form action="/offers/delete/<%= id %>" method="POST" style="display:inline">
-        <button type="submit">Supprimer</button>
-      </form>
-    </li>
-  <% }) %>
-</ul>
-
+    <%- include('common/header') %>
+    <main class="offers-list">
+      <% Object.entries(offers).forEach(([id, offer]) => { %>
+        <article class="offer-card">
+          <img src="<%= offer.imageUrl %>" alt="Image de l'enchère" class="offer-img">
+          <div class="offer-content">
+            <h2><%= offer.title || 'Sans titre' %></h2>
+            <p class="offer-desc"><%= offer.description || 'Pas de description.' %></p>
+            <div class="offer-meta">
+              <span class="offer-price">Prix actuel : <strong><%= offer.currentPrice %> €</strong></span>
+              <span class="offer-leader">En tête : <%= offer.currentLeader || 'Aucun' %></span>
+            </div>
+            <!-- Ajoute ici un bouton pour enchérir si besoin -->
+          </div>
+        </article>
+      <% }) %>
+    </main>
 </body>
 </html>

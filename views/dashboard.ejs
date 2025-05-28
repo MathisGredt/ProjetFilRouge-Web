@@ -2,13 +2,17 @@
 <html>
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles/dashboard.css">
+    <link rel="stylesheet" href="/styles/header.css">
 </head>
 <body>
-<h1>Tableau de bord</h1>
-<ul>
-  <li>Utilisateurs : <%= usersCount %></li>
-  <li>Offres : <%= offersCount %></li>
-  <li>Enchères : <%= bidsCount %></li>
-</ul>
+  <%- include('common/header') %>
+  <div class="container">
+    <ul>
+      <li>Utilisateurs : <%= usersCount %></li>
+      <li>Offres : <%= offersCount %></li>
+      <li>Enchères : <%= bidsCount %></li>
+    </ul>
+  </div>
 </body>
 </html>

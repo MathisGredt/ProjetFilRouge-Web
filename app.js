@@ -22,6 +22,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.urlencoded({ extended: true })); // Pour les formulaires HTML
 app.use(express.json()); // Pour les requêtes JSON (optionnel mais utile)
+app.use(express.static('public')); // Pour servir les fichiers statiques (CSS, images, etc.)
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
@@ -43,6 +44,7 @@ app.use('/offers', offersRouter);
 
 // Redirection vers la page d'authentification par défaut
 app.get('/', (req, res) => res.redirect('/auth'));
+
 
 // Écoute du serveur
 const PORT = process.env.PORT || 3000;
