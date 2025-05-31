@@ -1,4 +1,3 @@
-<!-- views/offers.ejs -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,22 +6,50 @@
     <link rel="stylesheet" href="/styles/header.css">
 </head>
 <body>
-    <%- include('common/header') %>
-    <main class="offers-list">
-      <% Object.entries(offers).forEach(([id, offer]) => { %>
+<%- include('common/header') %>
+<main class="offers-list">
+    <% Object.entries(offers).forEach(([id, offer]) => { %>
         <article class="offer-card">
-          <img src="<%= offer.imageUrl %>" alt="Image de l'enchère" class="offer-img">
-          <div class="offer-content">
-            <h2><%= offer.title || 'Sans titre' %></h2>
-            <p class="offer-desc"><%= offer.description || 'Pas de description.' %></p>
-            <div class="offer-meta">
-              <span class="offer-price">Prix actuel : <strong><%= offer.currentPrice %> €</strong></span>
-              <span class="offer-leader">En tête : <%= offer.currentLeader || 'Aucun' %></span>
+            <div class="offer-img-wrapper">
+                <img
+                        src="<%= offer.imageUrl %>"
+                        alt="Image de l'enchère"
+                        class="offer-img"
+                        onerror="this.onerror=null;this.src='/images/offer-placeholder.svg';"
+                >
             </div>
-            <!-- Ajoute ici un bouton pour enchérir si besoin -->
-          </div>
+            <div class="offer-content">
+                <div class="offer-title-row">
+                    <h2 class="offer-title"><%= offer.title || 'Sans titre' %></h2>
+                    <form method="POST" action="/offers/delete/<%= id %>" class="delete-offer-form" onsubmit="return confirmDeleteOffer('<%= offer.title ? offer.title.replace(/'/g, '\\\'') : '' %>');">
+                        <button type="submit" class="delete-offer-btn" title="Supprimer cette offre">
+                            <span aria-hidden="true">🗑️</span>
+                        </button>
+                    </form>
+                </div>
+                <p class="offer-desc"><%= offer.description || '' %></p>
+                <div class="offer-quick">
+                    <span class="offer-price"><strong><%= offer.currentPrice %> €</strong></span>
+                    <% if (offer.currentLeader) { %>
+                        <span class="offer-leader">En tête : <%= offer.currentLeader %></span>
+                    <% } %>
+                </div>
+                <div class="offer-footer">
+                    <span class="offer-seller" title="<%= offer.sellerName %>">Vendeur : <%= offer.sellerName %></span>
+                    <span class="offer-end">
+                <%= new Date(offer.endDate).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }) %>
+              </span>
+                </div>
+            </div>
         </article>
-      <% }) %>
-    </main>
+    <% }) %>
+</main>
+<script>
+    function confirmDeleteOffer(title) {
+        return window.confirm(
+            title ? `Voulez-vous vraiment supprimer l'offre « ${title} » ?` : "Voulez-vous vraiment supprimer cette offre ?"
+        );
+    }
+</script>
 </body>
 </html>
