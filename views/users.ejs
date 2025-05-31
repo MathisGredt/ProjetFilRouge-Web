@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="styles/login.css">
+    <title>Users Management</title>
+    <link rel="stylesheet" href="/styles/users.css">
     <link rel="stylesheet" href="/styles/header.css">
 </head>
 <body>
 <%- include('common/header') %>
-<ul>
-  <% Object.entries(users).forEach(([id, user]) => { %>
-    <li>
-      <%= user.email || 'Sans email' %>
-      <form action="/users/delete/<%= id %>" method="POST" style="display:inline">
-        <button type="submit">Supprimer</button>
-      </form>
-    </li>
-  <% }) %>
-</ul>
-
+<div class="container">
+    <h1>Liste des utilisateurs</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>UID</th>
+            <th>Email</th>
+            <th>Nom</th>
+            <th>Rôle</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% Object.entries(users).forEach(([id, user]) => { %>
+            <tr>
+                <td><%= id %></td>
+                <td><%= user.email || 'Sans email' %></td>
+                <td><%= user.name || 'Non spécifié' %></td>
+                <td><%= user.admin ? 'Administrateur' : 'Utilisateur' %></td>
+                <td>
+                    <form action="/users/delete/<%= id %>" method="POST" style="display:inline">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

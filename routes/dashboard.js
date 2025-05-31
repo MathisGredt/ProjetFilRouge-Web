@@ -15,21 +15,33 @@ router.get('/', async (req, res) => {
         const offers = offersSnap.val() || {};
         const bids = bidsSnap.val() || {};
 
+        // Utilisateurs
         const usersCount = Object.keys(users).length;
         const adminCount = Object.values(users).filter(user => user.admin).length;
         const activeUsersCount = Object.values(users).filter(user => user.active).length;
         const inactiveUsersCount = usersCount - activeUsersCount;
 
-        const offersAmounts = Object.values(offers)
-            .map(offer => offer.amount)
-            .filter(amount => typeof amount === 'number' && !isNaN(amount));
-        const maxOffer = offersAmounts.length > 0 ? Math.max(...offersAmounts) : 0;
-        const minOffer = offersAmounts.length > 0 ? Math.min(...offersAmounts) : 0;
-        const avgOffer = offersAmounts.length > 0
-            ? (offersAmounts.reduce((sum, amount) => sum + amount, 0) / offersAmounts.length).toFixed(2)
+        // Offres
+        const offersCount = Object.keys(offers).length;
+        const offersPrices = Object.values(offers)
+            .map(offer => offer.price)
+            .filter(price => typeof price === 'number' && !isNaN(price));
+        const maxOffer = offersPrices.length > 0 ? Math.max(...offersPrices) : 0;
+        const minOffer = offersPrices.length > 0 ? Math.min(...offersPrices) : 0;
+        const avgOffer = offersPrices.length > 0
+            ? (offersPrices.reduce((sum, price) => sum + price, 0) / offersPrices.length).toFixed(2)
             : 0;
 
-        const bidsAmounts = Object.values(bids)
+        // Enchères (bids) - flatten all bids from all offers
+        const allBids = [];
+        Object.values(bids).forEach(offerBids => {
+            if (offerBids && typeof offerBids === 'object') {
+                allBids.push(...Object.values(offerBids));
+            }
+        });
+
+        const bidsCount = allBids.length;
+        const bidsAmounts = allBids
             .map(bid => bid.amount)
             .filter(amount => typeof amount === 'number' && !isNaN(amount));
         const maxBid = bidsAmounts.length > 0 ? Math.max(...bidsAmounts) : 0;
@@ -44,11 +56,11 @@ router.get('/', async (req, res) => {
             adminCount,
             activeUsersCount,
             inactiveUsersCount,
-            offersCount: Object.keys(offers).length,
+            offersCount,
             maxOffer,
             minOffer,
             avgOffer,
-            bidsCount: Object.keys(bids).length,
+            bidsCount,
             maxBid,
             minBid,
             avgBid,

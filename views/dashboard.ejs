@@ -7,8 +7,15 @@
 </head>
 <body>
 <%- include('common/header') %>
-<div class="container">
-    <!-- Offers Section -->
+
+<div class="dashboard-summary">
+    <h1>Bienvenue sur le Tableau de bord Administrateur</h1>
+    <p>
+        Accès rapide à la gestion des utilisateurs, des offres et au suivi en temps réel des enchères.
+    </p>
+</div>
+
+<div class="dashboard-grid-2x2">
     <div class="section">
         <h2>Offres</h2>
         <ul>
@@ -17,20 +24,20 @@
             <li>Offre la plus basse : <%= minOffer %> €</li>
             <li>Offre moyenne : <%= avgOffer %> €</li>
         </ul>
+        <div class="dashboard-actions">
+            <a class="btn" href="/offers">Voir toutes les offres</a>
+        </div>
     </div>
-
-    <!-- Users Section -->
     <div class="section">
         <h2>Utilisateurs</h2>
         <ul>
             <li>Nombre d'utilisateurs : <%= usersCount %></li>
             <li>Nombre d'administrateurs : <%= adminCount %></li>
-            <li>Nombre d'utilisateurs actifs : <%= activeUsersCount %></li>
-            <li>Nombre d'utilisateurs inactifs : <%= inactiveUsersCount %></li>
         </ul>
+        <div class="dashboard-actions">
+            <a class="btn" href="/users">Voir tous les utilisateurs</a>
+        </div>
     </div>
-
-    <!-- Bids Section -->
     <div class="section">
         <h2>Enchères</h2>
         <ul>
@@ -41,11 +48,14 @@
             <li>Total des enchères : <%= totalBids %> €</li>
         </ul>
     </div>
+    <div class="chart-section">
+        <h2>Statistiques globales</h2>
+        <div class="chart-container">
+            <canvas id="statsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
 </div>
 
-<div class="chart-container">
-    <canvas id="statsChart" width="400" height="200"></canvas>
-</div>
 </body>
 <script>
     const dashboardData = [<%= usersCount %>, <%= offersCount %>, <%= bidsCount %>];
