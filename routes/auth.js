@@ -54,6 +54,16 @@ router.get('/', (req, res) => {
     res.render('login', { error: null });
 });
 
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error during logout:', err);
+            return res.status(500).send('Erreur lors de la déconnexion');
+        }
+        res.redirect('/auth'); // Redirect to the authentication page
+    });
+});
+
 router.post('/', async (req, res) => {
     const email = req.body.username || req.body.email; // selon le champ du formulaire
     const password = req.body.password;

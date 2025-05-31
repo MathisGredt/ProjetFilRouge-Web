@@ -4,6 +4,7 @@ const session = require('express-session');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 const passport = require('passport');
+const { isAuthenticated } = require('./routes/middleware');
 require('dotenv').config();
 
 const firebaseConfig = {
@@ -12,7 +13,7 @@ const firebaseConfig = {
     projectId: process.env.FIREBASE_PROJECT_ID,
 };
 
-// Initialisation Firebase
+// Firebase initialization
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://encheres-app-default-rtdb.europe-west1.firebasedatabase.app/'
@@ -21,34 +22,37 @@ admin.initializeApp({
 // Middleware
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.use(express.urlencoded({ extended: true })); // Pour les formulaires HTML
-app.use(express.json()); // Pour les requêtes JSON (optionnel mais utile)
-app.use(express.static('public')); // Pour servir les fichiers statiques (CSS, images, etc.)
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static('public'));
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Passez à true si vous utilisez HTTPS
+    cookie: { secure: false }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Import des routeurs
+// Public routes
 const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
+
+// Apply authentication middleware globally
+app.use(isAuthenticated);
+
+// Protected routes
 const dashboardRouter = require('./routes/dashboard');
 const usersRouter = require('./routes/users');
 const offersRouter = require('./routes/offers');
-
-// Routes
-app.use('/auth', authRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/users', usersRouter);
 app.use('/offers', offersRouter);
 
-// Redirection vers la page d'authentification par défaut
+// Default route
 app.get('/', (req, res) => res.redirect('/auth'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Serveur lancé sur : http://localhost:${PORT}`);
+    console.log(`Server running at: http://localhost:${PORT}`);
 });

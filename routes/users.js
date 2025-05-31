@@ -14,4 +14,14 @@ router.post('/delete/:id', async (req, res) => {
     res.redirect('/users');
 });
 
+router.post('/toggle-admin/:id', async (req, res) => {
+    const userRef = db.ref('users/' + req.params.id);
+    const snapshot = await userRef.once('value');
+    if (snapshot.exists()) {
+        const user = snapshot.val();
+        await userRef.update({ admin: !user.admin });
+    }
+    res.redirect('/users');
+});
+
 module.exports = router;

@@ -27,14 +27,51 @@
                 <td><%= user.name || 'Non spécifié' %></td>
                 <td><%= user.admin ? 'Administrateur' : 'Utilisateur' %></td>
                 <td>
-                    <form action="/users/delete/<%= id %>" method="POST" style="display:inline">
-                        <button type="submit">Supprimer</button>
-                    </form>
+                    <div class="actions-btn-group">
+                        <form action="/users/toggle-admin/<%= id %>" method="POST" style="display:inline" class="toggle-admin-form">
+                            <button
+                                    type="submit"
+                                    class="admin-btn"
+                                    data-username="<%= user.name || user.email || id %>"
+                                    data-admin="<%= user.admin %>"
+                                    aria-role="<%= user.admin ? 'retirer' : 'ajouter' %>"
+                                    style="<%= user.admin ? 'background:#f57c00;' : '' %>"
+                            >
+                                <%= user.admin ? 'Retirer admin' : 'Rendre admin' %>
+                            </button>
+                        </form>
+                        <form action="/users/delete/<%= id %>" method="POST" style="display:inline" class="delete-user-form">
+                            <button type="submit" class="delete-btn" data-username="<%= user.name || user.email || id %>">Supprimer</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         <% }) %>
         </tbody>
     </table>
 </div>
+<script>
+    document.querySelectorAll('.toggle-admin-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const btn = form.querySelector('.admin-btn');
+            const username = btn.dataset.username;
+            const isAdmin = btn.dataset.admin === 'true';
+            const msg = isAdmin
+                ? `Voulez-vous vraiment retirer le rôle administrateur à "${username}" ?`
+                : `Voulez-vous vraiment donner le rôle administrateur à "${username}" ?`;
+            if (!window.confirm(msg)) e.preventDefault();
+        });
+    });
+
+    document.querySelectorAll('.delete-user-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const btn = form.querySelector('.delete-btn');
+            const username = btn.dataset.username;
+            if (!window.confirm(`Voulez-vous vraiment supprimer l'utilisateur "${username}" ?`)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -7,25 +7,28 @@
     <link rel="stylesheet" href="styles/login.css">
 </head>
 <body>
-<h1>Connexion</h1>
-<% if (error) { %>
-    <p style="color: red;"><%= error %></p>
-<% } %>
-<form method="POST" action="/auth">
-    <label for="username">Nom d'utilisateur ou Email :</label>
-    <input type="text" id="username" name="username" required>
-    <br>
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="password" required>
-    <br>
-    <button type="submit">Se connecter</button>
-</form>
-<hr>
-<div style="margin-top:1em;">
-    <a href="/auth/google" style="display:inline-block; padding:10px 20px; background:#4285F4; color:white; border-radius:4px; text-decoration:none; font-weight:bold;">
-        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" style="height:20px; vertical-align:middle; margin-right:8px;">
-        Se connecter avec Google
-    </a>
+<div class="container">
+    <h1>Connexion</h1>
+
+    <form method="POST" action="/auth">
+        <label for="username">Nom d'utilisateur ou Email :</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Se connecter</button>
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+    </form>
+    <hr>
+    <div class="google-login">
+        <a href="/auth/google">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+            Se connecter avec Google
+        </a>
+    </div>
 </div>
 </body>
 </html>

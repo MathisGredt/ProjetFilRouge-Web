@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
 const db = admin.database();
+const { isAuthenticated } = require('./middleware');
 
-router.get('/', async (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
     try {
         const [usersSnap, offersSnap, bidsSnap] = await Promise.all([
             db.ref('users').once('value'),
