@@ -3,6 +3,7 @@ const app = express();
 const session = require('express-session');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
+const passport = require('passport');
 require('dotenv').config();
 
 const firebaseConfig = {
@@ -29,6 +30,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // Passez à true si vous utilisez HTTPS
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Import des routeurs
 const authRouter = require('./routes/auth');
@@ -45,8 +48,6 @@ app.use('/offers', offersRouter);
 // Redirection vers la page d'authentification par défaut
 app.get('/', (req, res) => res.redirect('/auth'));
 
-
-// Écoute du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Serveur lancé sur : http://localhost:${PORT}`);
