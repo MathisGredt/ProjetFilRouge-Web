@@ -6,13 +6,51 @@
     <link rel="stylesheet" href="/styles/header.css">
 </head>
 <body>
-  <%- include('common/header') %>
-  <div class="container">
-    <ul>
-      <li>Utilisateurs : <%= usersCount %></li>
-      <li>Offres : <%= offersCount %></li>
-      <li>Enchères : <%= bidsCount %></li>
-    </ul>
-  </div>
+<%- include('common/header') %>
+<div class="container">
+    <!-- Offers Section -->
+    <div class="section">
+        <h2>Offres</h2>
+        <ul>
+            <li>Nombre d'offres : <%= offersCount %></li>
+            <li>Offre la plus élevée : <%= maxOffer %> €</li>
+            <li>Offre la plus basse : <%= minOffer %> €</li>
+            <li>Offre moyenne : <%= avgOffer %> €</li>
+        </ul>
+    </div>
+
+    <!-- Users Section -->
+    <div class="section">
+        <h2>Utilisateurs</h2>
+        <ul>
+            <li>Nombre d'utilisateurs : <%= usersCount %></li>
+            <li>Nombre d'administrateurs : <%= adminCount %></li>
+            <li>Nombre d'utilisateurs actifs : <%= activeUsersCount %></li>
+            <li>Nombre d'utilisateurs inactifs : <%= inactiveUsersCount %></li>
+        </ul>
+    </div>
+
+    <!-- Bids Section -->
+    <div class="section">
+        <h2>Enchères</h2>
+        <ul>
+            <li>Nombre d'enchères : <%= bidsCount %></li>
+            <li>Mise maximale : <%= maxBid %> €</li>
+            <li>Mise minimale : <%= minBid %> €</li>
+            <li>Mise moyenne : <%= avgBid %> €</li>
+            <li>Total des enchères : <%= totalBids %> €</li>
+        </ul>
+    </div>
+</div>
+
+<div class="chart-container">
+    <canvas id="statsChart" width="400" height="200"></canvas>
+</div>
 </body>
+<script>
+    const dashboardData = [<%= usersCount %>, <%= offersCount %>, <%= bidsCount %>];
+    window.dashboardData = dashboardData;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/dashboardView.js"></script>
 </html>
