@@ -1,27 +1,22 @@
 # syntax=docker/dockerfile:1
+FROM node:20-alpine
 
-# Image légère Node.js pour production
-FROM node:20-alpine AS base
-
+# Variables d'environnement essentielles
 ENV NODE_ENV=production \
-    PORT=3000
+    PORT=3000 \
+    GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/serviceAccountKey.json
 
 WORKDIR /usr/src/app
 
-# Installer uniquement les dépendances (sans dev)
+# Installer les dépendances
 COPY package*.json ./
 RUN npm ci --omit=dev
 
 # Copier le code de l'application
 COPY . .
 
-# Exposer le port utilisé par l'app
+# Exposer le port
 EXPOSE 3000
 
-# Conseillé: montez le fichier serviceAccountKey.json en volume/secret à l'exécution
-# et fournissez les variables d'environnement (voir README ci-dessous).
-
-# Démarrage de l'application
+# Démarrer l'application
 CMD ["node", "app.js"]
-
-
